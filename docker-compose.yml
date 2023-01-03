@@ -1,4 +1,4 @@
-version: '2'
+version: '2.14'
 
 services:
   service:
@@ -8,8 +8,6 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    volumes:
-      - /opt/pics/
     container_name: service
     depends_on:
       - postgres
@@ -17,7 +15,7 @@ services:
   postgres:
     image: postgres:latest
     volumes:
-      - ./data.sql:/docker-entrypoint-initdb.d/data.sql
+      - ./db/data.sql:/docker-entrypoint-initdb.d/data.sql
       - /var/local/db/docker/:/var/lib/postgresql/data
     container_name: postgres
     ports:

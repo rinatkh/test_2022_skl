@@ -1,8 +1,5 @@
-SystemConfig:
-  MaxGoRoutines: 15000
-
 Server:
-  host: 'localhost'
+  host: '127.0.0.1'
   port: '8080'
   show_unknown_errors_in_response: 1
 
@@ -10,7 +7,7 @@ Logger:
   level: 'debug'
 
 Postgres:
-  host: 'localhost'
+  host: 'postgres'
   port: '5432'
   user: 'postgres'
   password: 'postgres'
