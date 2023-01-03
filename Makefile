@@ -27,3 +27,13 @@ up-debug:
 # reinstall all packages again and again in docker
 mod:
 	go mod tidy -compat=1.19 && go mod vendor && go install ./...
+
+mock:
+	mockgen -source=internal/users/repository.go -destination=internal/users/mocks/repository.go \
+	&& mockgen -source=internal/orders/repository.go -destination=internal/orders/mocks/repository.go \
+	&& mockgen -source=internal/currency/usecase.go -destination=internal/currency/mocks/usecase.go \
+	&& mockgen -source=internal/OrderProducts/usecase.go -destination=internal/OrderProducts/mocks/usecase.go \
+	&& mockgen -source=internal/products/usecase.go -destination=internal/users/products/usecase.go \
+
+tests:
+	go test ./internal/... -coverpkg=./internal/...
