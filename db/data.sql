@@ -1,9 +1,9 @@
 create table public.users
 (
     uuid       text primary key         not null default gen_random_uuid(),
-    firstname  character varying(50)    not null,
-    surname    character varying(50)    not null,
-    middlename character varying(50),
+    firstname  text                     not null,
+    surname    text                     not null,
+    middlename text,
     sex        character(1)             not null,
     birth_date timestamp with time zone not null,
     fio        text
@@ -36,7 +36,7 @@ create table public.products
     uuid          text primary key not null default gen_random_uuid(),
     price_in_usd  float            NOT NULL DEFAULT 0,
     left_in_stock INT              NOT NULL DEFAULT 0,
-    description   text
+    description   text             NOT NULL
 );
 
 alter table products
@@ -45,7 +45,7 @@ alter table products
 create table public.orders
 (
     uuid       text primary key         not null default gen_random_uuid(),
-    user_id    character varying(16)    NOT NULL REFERENCES users (uuid),
+    user_id    text                     NOT NULL REFERENCES users (uuid),
     created_at timestamp with time zone not null default now()
 );
 
@@ -54,8 +54,8 @@ alter table orders
 
 create table public.OrderProducts
 (
-    order_id   character varying(16)    NOT NULL REFERENCES orders (uuid),
-    product_id character varying(16)    NOT NULL REFERENCES products (uuid),
+    order_id   text                     NOT NULL REFERENCES orders (uuid),
+    product_id text                     NOT NULL REFERENCES products (uuid),
     PRIMARY KEY (order_id, product_id),
     created_at timestamp with time zone not null default now()
 );
@@ -74,8 +74,8 @@ alter table currency
 
 create table public.friends
 (
-    first_user  character varying(16) NOT NULL REFERENCES users (uuid),
-    second_user character varying(16) NOT NULL REFERENCES users (uuid),
+    first_user  text NOT NULL REFERENCES users (uuid),
+    second_user text NOT NULL REFERENCES users (uuid),
     PRIMARY KEY (first_user, second_user)
 );
 

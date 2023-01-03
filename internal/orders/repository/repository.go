@@ -36,13 +36,13 @@ func (p postgresRepository) GetOrder(id, userId string) (*core.Order, error) {
 func (p postgresRepository) GetOrders(userId string, limit, offset int64) (*[]core.Order, int64, error) {
 	var data []core.Order
 	queryStr := fmt.Sprintf("SELECT * FROM Orders WHERE user_id='%s'", userId)
+	queryStr += " ORDER BY created_at DESC"
 	if limit == 0 {
 		queryStr += " LIMIT 1"
 	} else {
 		queryStr += fmt.Sprintf(" LIMIT %d", limit)
 	}
 	queryStr += fmt.Sprintf(" OFFSET %d", offset)
-	queryStr += " ORDER BY created_at DESC"
 
 	err := p.db.Select(
 		&data, queryStr)
@@ -62,7 +62,7 @@ func (p postgresRepository) GetOrders(userId string, limit, offset int64) (*[]co
 }
 
 func (p postgresRepository) CreateOrder(order *core.Order) (*core.Order, error) {
-	query := fmt.Sprintf("INSERT INTO orders (user_id) VALUES ('%s')", order.UserId)
+	query := fmt.Sprintf("INSERT INTO Orders (user_id) VALUES ('%s')", order.UserId)
 	res, err := p.db.Query(query)
 	if res != nil {
 		_ = res.Close()
@@ -74,7 +74,7 @@ func (p postgresRepository) CreateOrder(order *core.Order) (*core.Order, error) 
 }
 
 func (p postgresRepository) DeleteOrder(order *core.Order) error {
-	res, err := p.db.Query(fmt.Sprintf("DELETE FROM orders WHERE uuid='%s' AND user_id='%s'", order.Id, order.UserId))
+	res, err := p.db.Query(fmt.Sprintf("DELETE FROM Orders WHERE uuid='%s' AND user_id='%s'", order.Id, order.UserId))
 
 	if res != nil {
 		_ = res.Close()
@@ -84,7 +84,7 @@ func (p postgresRepository) DeleteOrder(order *core.Order) error {
 
 func (p postgresRepository) getOrder(order *core.Order) (*core.Order, error) {
 	var data []core.Order
-	err := p.db.Select(&data, fmt.Sprintf("SELECT * FROM orders WHERE user_id='%s' ORDER BY created_at DESC", order.UserId))
+	err := p.db.Select(&data, fmt.Sprintf("SELECT * FROM Orders WHERE user_id='%s' ORDER BY created_at DESC", order.UserId))
 	if err != nil {
 		return nil, err
 	}

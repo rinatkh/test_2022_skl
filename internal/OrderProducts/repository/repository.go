@@ -22,13 +22,13 @@ func NewPostgresRepository(db *sqlx.DB, log *logrus.Entry) orderProducts.OrderPr
 func (p postgresRepository) GetOrderProducts(orderId string, limit, offset int64) (*[]orderProducts.OrderProducts, int64, error) {
 	var data []orderProducts.OrderProducts
 	queryStr := fmt.Sprintf("SELECT * FROM OrderProducts WHERE order_id='%s'", orderId)
+	queryStr += " ORDER BY created_at DESC"
 	if limit == 0 {
 		queryStr += " LIMIT 1"
 	} else {
 		queryStr += fmt.Sprintf(" LIMIT %d", limit)
 	}
 	queryStr += fmt.Sprintf(" OFFSET %d", offset)
-	queryStr += " ORDER BY created_at DESC"
 
 	err := p.db.Select(
 		&data, queryStr)
