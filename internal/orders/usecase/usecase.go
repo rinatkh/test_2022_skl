@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"fmt"
+	"github.com/gofiber/fiber/v2"
 	"github.com/rinatkh/test_2022/config"
 	orderProductDTO "github.com/rinatkh/test_2022/internal/OrderProducts"
 	orderProducts "github.com/rinatkh/test_2022/internal/OrderProducts"
@@ -89,6 +91,9 @@ func (u OrderUseCase) AddOrderProducts(params *orderDTO.UpdateOrderRequest) (*or
 		Limit:   0,
 		Offset:  0,
 	})
+	if elems == nil {
+		return nil, constants.NewCodedError(fmt.Sprintf("Can not add product '%s'", params.ProductID), fiber.StatusConflict)
+	}
 	list, price, err := u.getProductsPrice(elems.OrderProducts, params.Currency)
 	if err != nil {
 		return nil, err
@@ -115,6 +120,9 @@ func (u OrderUseCase) DeleteOrderProducts(params *orderDTO.UpdateOrderRequest) (
 		Limit:   0,
 		Offset:  0,
 	})
+	if elems == nil {
+		return nil, constants.NewCodedError(fmt.Sprintf("Can not delete product '%s'", params.ProductID), fiber.StatusConflict)
+	}
 	list, price, err := u.getProductsPrice(elems.OrderProducts, params.Currency)
 	if err != nil {
 		return nil, err
